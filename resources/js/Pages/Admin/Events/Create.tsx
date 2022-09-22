@@ -6,6 +6,7 @@ import ValidationErrors from "@/Components/ValidationErrors";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { FlashMessage } from "@/Components/FlashMessage";
 import ImageModal from "@/Components/ImageModal";
+import axios from "axios";
 
 interface Image {
     id: string;
@@ -53,6 +54,21 @@ export default function Create(props: any) {
         post(route("admin.events.store"));
     }
 
+    const [selectProgram, setSelectProgram] = useState("");
+
+    const handleChange = async (e: any) => {
+        try {
+            await axios
+                .get(`/api/createProgram/?program=${e.target.value}`)
+                .then((res) => {
+                    setData("name", res.data.name);
+                    setData("information", res.data.information);
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     return (
         <Authenticated
             auth={props.auth}
@@ -71,6 +87,40 @@ export default function Create(props: any) {
                         <FlashMessage />
                         <div className="p-16 bg-white border-b border-gray-200">
                             <form onSubmit={onSubmit}>
+                                <div className="flex justify-center items-center form-control mb-10">
+                                    <div>
+                                        <label className="label">
+                                            <span className="label-text">
+                                                演目選択
+                                            </span>
+                                        </label>
+
+                                        <select
+                                            onChange={handleChange}
+                                            value={selectProgram}
+                                            className="select select-secondary w-full max-w-xs"
+                                        >
+                                            <option
+                                                disabled
+                                                value={selectProgram}
+                                                selected
+                                            >
+                                                演目選択
+                                            </option>
+                                            {props.program_name.map(
+                                                (p: any) => (
+                                                    <option
+                                                        key={p.name}
+                                                        value={p.name}
+                                                    >
+                                                        {p.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div className="grid md:grid-cols-2 md:gap-6">
                                     <div className="relative z-0 mb-6 w-full group">
                                         <input

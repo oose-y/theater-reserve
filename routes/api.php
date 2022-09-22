@@ -39,6 +39,11 @@ Route::middleware('auth:admin')
     });
 
 Route::middleware('auth:admin')
+    ->get('/createProgram', function (Request $request) {
+        return Event::where('name', $request->program)->select('name', 'information')->first();
+    });
+
+Route::middleware('auth:admin')
     ->get('/searchProgram', function (Request $request) {
         return Event::where('name', $request->program)->select('id', 'name', 'start_date')->get();
     });

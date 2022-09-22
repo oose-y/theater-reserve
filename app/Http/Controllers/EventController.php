@@ -8,6 +8,8 @@ use App\Models\Event;
 use App\Models\Reserve;
 use Inertia\Inertia;
 use App\Service\EventService;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -22,7 +24,11 @@ class EventController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Events/Create');
+
+
+        $program_name = DB::table('events')->select('name')->distinct()->get();
+
+        return Inertia::render('Admin/Events/Create', ['program_name' => $program_name]);
     }
 
 
