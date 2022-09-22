@@ -7,6 +7,7 @@ import { HiOutlinePlusSm } from "react-icons/hi";
 import { FlashMessage } from "@/Components/FlashMessage";
 import ImageModal from "@/Components/ImageModal";
 import axios from "axios";
+import { stringify } from "querystring";
 
 interface Image {
     id: string;
@@ -54,6 +55,7 @@ export default function Create(props: any) {
         post(route("admin.events.store"));
     }
 
+    const [enmoku, setEnmoku] = useState({ name: "", information: "" });
     const [selectProgram, setSelectProgram] = useState("");
 
     const handleChange = async (e: any) => {
@@ -62,12 +64,16 @@ export default function Create(props: any) {
                 .get(`/api/createProgram/?program=${e.target.value}`)
                 .then((res) => {
                     setData("name", res.data.name);
-                    setData("information", res.data.information);
+                    setEnmoku(res.data);
                 });
         } catch (e) {
             console.log(e);
         }
     };
+    useEffect(() => {
+        setData("information", enmoku.information);
+        console.log("hello");
+    }, [enmoku]);
 
     return (
         <Authenticated
